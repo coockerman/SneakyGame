@@ -1,0 +1,9 @@
+back.png
+size:304,152
+filter:Linear,Linear
+charBack
+bounds:2,2,145,237
+rotate:90
+ramenR
+bounds:241,74,73,58
+rotate:90

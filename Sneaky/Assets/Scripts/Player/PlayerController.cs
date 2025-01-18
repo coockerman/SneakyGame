@@ -24,16 +24,15 @@ public class PlayerController : MonoBehaviour
     // Các tên animation trong Spine
     private const string ANIM_IDLE_DOWN = "idle_down";
     private const string ANIM_IDLE_UP = "idle_up";
-    private const string ANIM_IDLE_LEFT = "idle_left";
-    private const string ANIM_IDLE_RIGHT = "idle_right";
+    private const string ANIM_IDLE_LEFT = "idle_right";
 
     private const string ANIM_WALK_DOWN = "walk_down";
     private const string ANIM_WALK_UP = "walk_up";
-    private const string ANIM_WALK_LEFT = "walk_left";
-    private const string ANIM_WALK_RIGHT = "walk_right";
+    private const string ANIM_WALK_LEFT = "walk_right";
 
     private string currentAnimation = "";
 
+    public bool keyIsPressed = false;
     // Start is called before the first frame update
     void Start()
     {
@@ -69,6 +68,8 @@ public class PlayerController : MonoBehaviour
         float moveX = Input.GetAxisRaw("Horizontal");
         float moveY = Input.GetAxisRaw("Vertical");
 
+        keyIsPressed = IsMovementKeyPressed();
+
         movement = new Vector2(moveX, 0).normalized;
         directionAnim = new Vector2(moveX, moveY).normalized;
         // Cập nhật vị trí nhân vật
@@ -83,6 +84,8 @@ public class PlayerController : MonoBehaviour
         // Lấy input di chuyển từ bàn phím
         float moveX = Input.GetAxisRaw("Horizontal");
         float moveY = Input.GetAxisRaw("Vertical");
+
+        keyIsPressed = IsMovementKeyPressed();
 
         if (transform.position.y >= 0.5f) 
         {
@@ -102,9 +105,26 @@ public class PlayerController : MonoBehaviour
         UpdateAnimation();
     }
 
+    bool IsMovementKeyPressed()
+    {
+        KeyCode[] movementKeys = new KeyCode[]
+        {
+        KeyCode.W, KeyCode.A, KeyCode.S, KeyCode.D, // AWSD
+        KeyCode.UpArrow, KeyCode.DownArrow, KeyCode.LeftArrow, KeyCode.RightArrow // Mũi tên
+        };
+
+        foreach (KeyCode key in movementKeys)
+        {
+            if (Input.GetKey(key))  // Nếu một trong các phím được giữ
+            {
+                return true;
+            }
+        }
+
+        return false;  // Không có phím di chuyển nào được giữ
+    }
     void UpdateAnimation()
     {
-        return;
         string newAnimation = "";
 
         if (directionAnim.magnitude > 0)
@@ -113,7 +133,12 @@ public class PlayerController : MonoBehaviour
             if (Mathf.Abs(directionAnim.x) > Mathf.Abs(directionAnim.y))
             {
                 // Di chuyển theo trục X (trái/phải)
-                newAnimation = directionAnim.x > 0 ? ANIM_WALK_RIGHT : ANIM_WALK_LEFT;
+                newAnimation = ANIM_WALK_LEFT;
+
+                // Lật nhân vật nếu đi phải
+                Vector3 localScale = transform.localScale;
+                localScale.x = directionAnim.x > 0 ? Mathf.Abs(localScale.x) : -Mathf.Abs(localScale.x);
+                transform.localScale = localScale;
             }
             else
             {
@@ -126,8 +151,7 @@ public class PlayerController : MonoBehaviour
             // Không di chuyển
             if (currentAnimation.Contains("walk"))
             {
-                if (currentAnimation == ANIM_WALK_RIGHT) newAnimation = ANIM_IDLE_RIGHT;
-                else if (currentAnimation == ANIM_WALK_LEFT) newAnimation = ANIM_IDLE_LEFT;
+                if (currentAnimation == ANIM_WALK_LEFT) newAnimation = ANIM_IDLE_LEFT;
                 else if (currentAnimation == ANIM_WALK_UP) newAnimation = ANIM_IDLE_UP;
                 else if (currentAnimation == ANIM_WALK_DOWN) newAnimation = ANIM_IDLE_DOWN;
             }
@@ -140,6 +164,7 @@ public class PlayerController : MonoBehaviour
             currentAnimation = newAnimation;
         }
     }
+
     //IEnumerator CoFalling()
     //{
     //    transform.Translate(new Vector3(0.5f, 0, 0) * speed * Time.deltaTime);
@@ -184,7 +209,7 @@ public class PlayerController : MonoBehaviour
         }
         else if (collision.gameObject.tag == "destination")
         {
-            skeletonAnimation.AnimationState.SetAnimation(0, ANIM_IDLE_RIGHT, true);
+            skeletonAnimation.AnimationState.SetAnimation(0, ANIM_IDLE_LEFT, true);
 
             statePlayer = EStatePlayer.endGame;
         }
@@ -195,7 +220,7 @@ public class PlayerController : MonoBehaviour
         if (collision.gameObject.tag == "stair")
         {
             statePlayer = EStatePlayer.normal;
-            GetComponent<Rigidbody2D>().AddForce(new Vector2(0, -0.1f));
+            //GetComponent<Rigidbody2D>().AddForce(new Vector2(0, -0.1f));
         }
     }
 }

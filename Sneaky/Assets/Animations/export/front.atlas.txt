@@ -1,0 +1,14 @@
+front.png
+size:320,164
+filter:Linear,Linear
+Layer 2
+bounds:2,2,157,241
+rotate:90
+Layer 3
+bounds:245,8,91,28
+rotate:90
+Layer 4
+bounds:275,52,47,34
+rotate:90
+ramenL
+bounds:245,101,73,58

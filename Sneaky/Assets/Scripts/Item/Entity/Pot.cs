@@ -42,16 +42,9 @@ public class Pot : MonoBehaviour, IPointerClickHandler
         }
 
     }
-    bool checkFood()
+    public bool checkFood()
     {
-        foreach (SOIngredient item in GameManager.Instance.targetFood.ingredientList)
-        {
-            if(!PlayerController.Instance.playerBag.listIngredientInBag.Contains(item))
-            {
-                return false;
-            }
-        }
-        return true;
+        return PlayerController.Instance.playerBag.checkFood();
     }
 
     private IEnumerator CoCoking()

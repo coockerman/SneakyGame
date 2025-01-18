@@ -8,16 +8,6 @@ public class UIManager : MonoBehaviour
     [SerializeField] Slider sliderDog;
     [SerializeField] SoundManager soundManager;
 
-
-    void Start()
-    {
-        // Kiểm tra nếu Slider đã được gán
-        if (sliderDad != null && soundManager != null)
-        {
-            sliderDad.value = AudioListener.volume;
-            sliderDad.onValueChanged.AddListener(OnMusicVolumeChanged);
-        }
-    }
     public void OnUISetting()
     {
         settingUI.SetActive(true);
@@ -36,11 +26,6 @@ public class UIManager : MonoBehaviour
     public void ChangeMusic()
     {
         soundManager.ToggleMute();
-    }
-
-    public void OnMusicVolumeChanged(float volume)
-    {
-        soundManager.SetMusicVolume(volume); // Cập nhật âm lượng từ UI
     }
 
     public void BackToHome()

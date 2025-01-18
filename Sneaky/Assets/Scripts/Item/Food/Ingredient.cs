@@ -1,16 +1,20 @@
 using UnityEngine;
+using UnityEngine.EventSystems;
 
-public class Ingredient : MonoBehaviour
+public class Ingredient : MonoBehaviour, IPointerClickHandler
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    [SerializeField] SOIngredient dataIngredient;
+
+    
+
     void Start()
     {
-        
+        GetComponent<SpriteRenderer>().sprite = dataIngredient.spriteIngredient;
+
     }
 
-    // Update is called once per frame
-    void Update()
+    public void OnPointerClick(PointerEventData eventData)
     {
-        
+        // add ingredient to bag
     }
 }

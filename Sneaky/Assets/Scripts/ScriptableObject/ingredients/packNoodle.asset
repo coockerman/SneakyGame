@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: packNoodle
   m_EditorClassIdentifier: 
   nameIngredient: "g\xF3i m\xEC t\xF4m"
-  spriteIngredient: {fileID: 0}
+  spriteIngredient: {fileID: -9136834448258697486, guid: f0a69c3086a8ab145a00df16233994e8, type: 3}

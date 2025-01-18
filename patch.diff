@@ -1,0 +1,78 @@
+From d1c8b65ff213b5d7f664c915a425b0bea7654cb0 Mon Sep 17 00:00:00 2001
+From: hoagg-2603 <hoangnh.b22cn336@stu.ptit.edu.vn>
+Date: Sat, 18 Jan 2025 18:43:51 +0700
+Subject: [PATCH] ui
+
+---
+ Sneaky/Assets/Scripts/GameManager/SoundManager.cs | 13 +------------
+ Sneaky/Assets/Scripts/UI/UIManager.cs             | 15 ---------------
+ 2 files changed, 1 insertion(+), 27 deletions(-)
+
+diff --git a/Sneaky/Assets/Scripts/GameManager/SoundManager.cs b/Sneaky/Assets/Scripts/GameManager/SoundManager.cs
+index 311ff72..1b9334d 100644
+--- a/Sneaky/Assets/Scripts/GameManager/SoundManager.cs
++++ b/Sneaky/Assets/Scripts/GameManager/SoundManager.cs
+@@ -7,18 +7,7 @@ public class SoundManager : MonoBehaviour
+ {
+     [SerializeField] AudioClip stepFoot;
+     [SerializeField] AudioClip stepFoot2;
+-    public AudioListener audioListener;
+-    public Slider volumeSlider;
+     bool isMusicMuted = false;
+-    void Start()
+-    {
+-        // Kiểm tra Slider có được gán không
+-        if (volumeSlider != null)
+-        {
+-            volumeSlider.value = AudioListener.volume;
+-            volumeSlider.onValueChanged.AddListener(SetMusicVolume);
+-        }
+-    }
+ 
+     public void SetMusicVolume(float volume)
+     {
+@@ -26,7 +15,7 @@ public class SoundManager : MonoBehaviour
+         if (volume > 0)
+         {
+             isMusicMuted = false;
+-        }// Cập nhật âm lượng
++        }
+     }
+     public void ToggleMute()
+     {
+diff --git a/Sneaky/Assets/Scripts/UI/UIManager.cs b/Sneaky/Assets/Scripts/UI/UIManager.cs
+index d874718..558278f 100644
+--- a/Sneaky/Assets/Scripts/UI/UIManager.cs
++++ b/Sneaky/Assets/Scripts/UI/UIManager.cs
+@@ -8,16 +8,6 @@ public class UIManager : MonoBehaviour
+     [SerializeField] Slider sliderDog;
+     [SerializeField] SoundManager soundManager;
+ 
+-
+-    void Start()
+-    {
+-        // Kiểm tra nếu Slider đã được gán
+-        if (sliderDad != null && soundManager != null)
+-        {
+-            sliderDad.value = AudioListener.volume;
+-            sliderDad.onValueChanged.AddListener(OnMusicVolumeChanged);
+-        }
+-    }
+     public void OnUISetting()
+     {
+         settingUI.SetActive(true);
+@@ -38,11 +28,6 @@ public class UIManager : MonoBehaviour
+         soundManager.ToggleMute();
+     }
+ 
+-    public void OnMusicVolumeChanged(float volume)
+-    {
+-        soundManager.SetMusicVolume(volume); // Cập nhật âm lượng từ UI
+-    }
+-
+     public void BackToHome()
+     {
+        
+-- 
+2.47.1.windows.2
+

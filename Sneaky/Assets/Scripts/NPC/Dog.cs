@@ -46,12 +46,10 @@ public class Dog : MonoBehaviour
 
         if (distance < availableDistance)
         {
-            Debug.Log("near");
             return true;
         }
         else
         {
-            Debug.Log("unNear");
             return false;
         }
     }

@@ -7,6 +7,8 @@ public class Dad : MonoBehaviour
     [SerializeField] float countTiming = 0;
     [SerializeField] float decreaseTiming;
     [SerializeField] float increaseTiming;
+
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -22,15 +24,12 @@ public class Dad : MonoBehaviour
             if(countTiming > maxTiming)
             {
                 GameManager.Instance.SetEndGame();
-            }
-            UIManager.Instance.UpdateSliderDad(countTiming / maxTiming);
-            //slide 
+            } 
         }
         else if(PlayerController.Instance.keyIsPressed == false)
         {
             if(countTiming > 0)
-            {
-                UIManager.Instance.UpdateSliderDad(countTiming/maxTiming);
+            {               
                 countTiming -= Time.deltaTime * decreaseTiming;
             }
             else
@@ -38,6 +37,10 @@ public class Dad : MonoBehaviour
                 countTiming = 0;
             }
             
-        } 
+        }
+        UIManager.Instance.UpdateSliderDad(countTiming / maxTiming);
+        UIManager.Instance.UpdateBubbleSize(countTiming / maxTiming);
     }
+
+    
 }

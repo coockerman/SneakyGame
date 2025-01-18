@@ -45,20 +45,24 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (statePlayer == EStatePlayer.normal)
+        if(GameManager.Instance.stateGamePlay == GameManager.GameState.Play)
         {
-            MoveNormal();
-        }
-        else if (statePlayer == EStatePlayer.stair)
-        {
-            MoveStair();
-        }
-        else if (statePlayer == EStatePlayer.endGame)
-        {
-            // pause game
-        }
-        else if (statePlayer == EStatePlayer.rope) {
-            StartCoroutine(CoFalling());    
+            if (statePlayer == EStatePlayer.normal)
+            {
+                MoveNormal();
+            }
+            else if (statePlayer == EStatePlayer.stair)
+            {
+                MoveStair();
+            }
+            else if (statePlayer == EStatePlayer.endGame)
+            {
+                // pause game
+            }
+            else if (statePlayer == EStatePlayer.rope)
+            {
+                StartCoroutine(CoFalling());
+            }
         }
     }
 

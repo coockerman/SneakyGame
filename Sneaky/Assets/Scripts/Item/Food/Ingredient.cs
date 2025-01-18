@@ -17,13 +17,12 @@ public class Ingredient : MonoBehaviour, IPointerClickHandler
         
         if (checkNear() == true)
         {
-            Debug.Log("yes");
             PlayerController.Instance.playerBag.listIngredientInBag.Add(dataIngredient);
             gameObject.SetActive(false);
         }
         else
         {
-            Debug.Log("no");
+            //text dialogue: not enough distance
         }
     }
 

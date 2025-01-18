@@ -125,6 +125,7 @@ public class PlayerController : MonoBehaviour
     }
     void UpdateAnimation()
     {
+        return;
         string newAnimation = "";
 
         if (directionAnim.magnitude > 0)

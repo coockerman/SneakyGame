@@ -1,12 +1,17 @@
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 
 public class UIManager : MonoBehaviour
 {
+    public static UIManager Instance;
+    private void Awake()
+    {
+        Instance = this;
+    }
     [SerializeField] GameObject settingUI;
     [SerializeField] Slider sliderDad;
     [SerializeField] Slider sliderDog;
-
+    
     public void OnUISetting()
     {
         settingUI.SetActive(true);
@@ -57,7 +62,5 @@ public class UIManager : MonoBehaviour
     {
         sliderDog.value = count;
     }
-
-
 }
 

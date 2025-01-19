@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: packHotdog
   m_EditorClassIdentifier: 
   nameIngredient: "x\xFAc x\xEDch"
-  spriteIngredient: {fileID: 21300000, guid: 2412d1d8498463f49ae6ebe3a66ffae9, type: 3}
+  spriteIngredient: {fileID: -7169380321664745913, guid: 167595a916a11434dbff842ddcecd4eb, type: 3}

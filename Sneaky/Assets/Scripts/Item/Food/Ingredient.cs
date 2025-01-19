@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -5,11 +6,23 @@ public class Ingredient : MonoBehaviour, IPointerClickHandler
 {
     [SerializeField] SOIngredient dataIngredient;
     [SerializeField] float availableDistance;
-
+    [SerializeField] private float scaleNear = 1.2f;
     void Start()
     {
         GetComponent<SpriteRenderer>().sprite = dataIngredient.spriteIngredient;
 
+    }
+
+    private void Update()
+    {
+        if (checkNear())
+        {
+            gameObject.transform.localScale = new Vector3(scaleNear, scaleNear, scaleNear);
+        }
+        else
+        {
+            gameObject.transform.localScale = new Vector3(1f, 1f, 1f);
+        }
     }
 
     public void OnPointerClick(PointerEventData eventData)

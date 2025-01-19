@@ -1,0 +1,13 @@
+dog.png
+size:272,88
+filter:Linear,Linear
+pma:true
+body
+bounds:2,3,151,83
+offsets:3,0,154,83
+haed
+bounds:155,9,77,71
+rotate:90
+tail
+bounds:228,2,84,42
+rotate:90

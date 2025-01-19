@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: packFlower
   m_EditorClassIdentifier: 
   nameIngredient: hoa
-  spriteIngredient: {fileID: 21300000, guid: 4f554405f8f06164db0773d689da243c, type: 3}
+  spriteIngredient: {fileID: 2335413334521252836, guid: f1a2c90dbc93b294583b4b6db41e59ed, type: 3}

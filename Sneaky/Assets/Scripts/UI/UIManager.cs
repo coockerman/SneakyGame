@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using TMPro;
+using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class UIManager : MonoBehaviour
@@ -8,36 +10,51 @@ public class UIManager : MonoBehaviour
     {
         Instance = this;
     }
-    [SerializeField] GameObject settingUI;
-    [SerializeField] GameObject bubble;
+    [SerializeField] private GameObject settingUI;
+    [SerializeField] private GameObject winningUI;
+    [SerializeField] private GameObject loseUI;
     [SerializeField] Slider sliderDad;
     [SerializeField] Slider sliderDog;
 
-
     [SerializeField] float maxScale = 8f; 
     [SerializeField] float minScale = 4f;
-
-    public void Start()
+    [SerializeField] private TextMeshProUGUI timeText;
+    [SerializeField] private GameObject clickPrefab;
+    
+    public void OnPlayerNear(Vector3 position)
     {
-        // Kiểm tra nếu bubble chưa được gán, tìm đối tượng có tên "Bubble" (hoặc tên của đối tượng bubble trong scene)
-        if (bubble == null)
-        {
-            bubble = GameObject.Find("bubble_0");
-            if (bubble == null)
-            {
-                Debug.LogError("Bubble not found. Please assign the bubble GameObject.");
-            }
-        }
+        GameObject click = Instantiate(clickPrefab, position, Quaternion.identity);
+        Destroy(click, 1f);
     }
     public void OnUISetting()
     {
         settingUI.SetActive(true);
-        Time.timeScale = 0;
     }
     public void OffnUISetting()
     {
         settingUI.SetActive(false);
-        Time.timeScale = 1;
+    }
+    public void UpdateTime(int time)
+    {
+        int minutes = Mathf.FloorToInt(time / 60); // Tính số phút
+        int seconds = Mathf.FloorToInt(time % 60); // Tính số giây còn lại
+        timeText.text = string.Format("{0:00}:{1:00}", minutes, seconds);
+    }
+    public void OnWinningUI()
+    {
+        winningUI.SetActive(true);
+    }
+    public void OffWinningUI()
+    {
+        winningUI.SetActive(false);
+    }
+    public void OnLoseUI()
+    {
+        loseUI.SetActive(true);
+    }
+    public void OffLoseUI()
+    {
+        loseUI.SetActive(false);
     }
     public void Exit()
     {
@@ -56,20 +73,23 @@ public class UIManager : MonoBehaviour
 
     public void BackToHome()
     {
-       
+        SceneManager.LoadScene(0);
     }
 
     public void NextMap()
     {
-
+        int nextScene = SceneManager.GetActiveScene().buildIndex + 1;
+        if(nextScene >= SceneManager.sceneCountInBuildSettings)
+        {
+            nextScene = 0;
+        }
+        SceneManager.LoadScene(nextScene);
     }
 
     public void Replay()
     {
-
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
-
-
 
     public void UpdateSliderDad(float count)
     {
@@ -78,16 +98,6 @@ public class UIManager : MonoBehaviour
     public void UpdateSliderDog(float count)
     {
         sliderDog.value = count;
-    }
-    public void UpdateBubbleSize(float sizeFactor)
-    {
-        if (bubble != null)
-        {
-            // Tính toán tỷ lệ mới cho bubble, từ minScale đến maxScale
-            float newScale = Mathf.Lerp(minScale, maxScale, sizeFactor);
-            bubble.transform.localScale = new Vector3(newScale, newScale, newScale);
-        }
-        
     }
 }
 

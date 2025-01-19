@@ -16,12 +16,16 @@ public class GameManager : MonoBehaviour
     public SOFood targetFood;
     [SerializeField] int currentLevel = 1;
     public int CurrentLevel { get { return currentLevel; } }
-
+    public GameObject ideaFood;
     public GameState stateGamePlay = GameState.Intro;
+    public float maxTimeMap = 120f;
+    public float countTimeMap = 0;
+    bool isEndGame = false;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-
+        countTimeMap = maxTimeMap;
+        StartCoroutine(ActivateAfterDelay(3f));
     }
 
     // Update is called once per frame
@@ -29,11 +33,16 @@ public class GameManager : MonoBehaviour
     {
         if (stateGamePlay == GameState.Intro)
         {
-
-            StartCoroutine(ActivateAfterDelay(3f));
+            
         }
         else if (stateGamePlay == GameState.Play)
         {
+            countTimeMap -= Time.deltaTime;
+            UIManager.Instance.UpdateTime((int)countTimeMap);
+            if(countTimeMap <= 0)
+            {
+                SetEndGame();
+            }
             // Logic Play state
         }
         else if (stateGamePlay == GameState.Pause)
@@ -52,13 +61,36 @@ public class GameManager : MonoBehaviour
 
     private IEnumerator ActivateAfterDelay(float delay)
     {
-        //show the target food in idea
+        ideaFood.gameObject.SetActive(true);
         yield return new WaitForSeconds(delay);
+        ideaFood.gameObject.SetActive(false);
         stateGamePlay = GameState.Play;
     }
 
     public void SetEndGame()
     {
-        stateGamePlay = GameState.GameOver;
+        if (!isEndGame)
+        {
+            isEndGame = true;
+            stateGamePlay = GameState.GameOver;
+            UIManager.Instance.OnLoseUI();
+        }
+        
+    }
+
+    public void SetWinGame()
+    {
+        if (!isEndGame)
+        {
+            isEndGame = true;
+            stateGamePlay = GameState.GamePass;
+            UIManager.Instance.OnWinningUI();
+        }
+        
+    }
+    
+    void StopStatusGame()
+    {
+        
     }
 }

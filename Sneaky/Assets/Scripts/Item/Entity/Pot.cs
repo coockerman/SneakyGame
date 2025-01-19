@@ -9,6 +9,7 @@ using UnityEngine.EventSystems;
 public class Pot : MonoBehaviour, IPointerClickHandler
 {
     [SerializeField] float availableDistance = 1f;
+    [SerializeField] private float scaleNear = 1.2f;
     public void OnPointerClick(PointerEventData eventData)
     {
        if(checkFood() && checkNear())
@@ -27,7 +28,17 @@ public class Pot : MonoBehaviour, IPointerClickHandler
         }
 
     }
-
+    private void Update()
+    {
+        if (checkNear())
+        {
+            gameObject.transform.localScale = new Vector3(scaleNear, scaleNear, scaleNear);
+        }
+        else
+        {
+            gameObject.transform.localScale = new Vector3(1f, 1f, 1f);
+        }
+    }
     bool checkNear()
     {
         float distance = Vector3.Distance(this.transform.position, PlayerController.Instance.transform.position);
@@ -49,12 +60,10 @@ public class Pot : MonoBehaviour, IPointerClickHandler
 
     private IEnumerator CoCoking()
     {
-
-        //On animation cooking
-
+        SoundManager.Instance.OnCookingSFX();
         yield return new WaitForSeconds(3f);
 
-        //change player Animation
+        PlayerController.Instance.FinishGoal();
 
         yield return null;
 

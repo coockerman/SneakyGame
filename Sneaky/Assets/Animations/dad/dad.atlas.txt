@@ -1,0 +1,22 @@
+dad.png
+size:156,441
+filter:Linear,Linear
+pma:true
+Layer 2
+bounds:2,347,120,44
+offsets:1,1,122,46
+dad
+bounds:2,2,218,147
+rotate:90
+f
+bounds:2,222,152,123
+m1
+bounds:76,393,46,74
+offsets:1,1,48,76
+rotate:90
+m2
+bounds:2,416,34,23
+offsets:1,2,37,26
+n
+bounds:38,408,36,31
+offsets:1,1,38,33

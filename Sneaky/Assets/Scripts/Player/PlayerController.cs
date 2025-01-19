@@ -22,17 +22,30 @@ public class PlayerController : MonoBehaviour
     private Vector2 directionAnim;
 
     // Các tên animation trong Spine
-    private const string ANIM_IDLE_DOWN = "idle_down";
-    private const string ANIM_IDLE_UP = "idle_up";
-    private const string ANIM_IDLE_LEFT = "idle_right";
+    private string ANIM_IDLE_DOWN = "idle";
+    private string ANIM_IDLE_UP = "idle";
+    private string ANIM_IDLE_LEFT = "idle";
 
-    private const string ANIM_WALK_DOWN = "walk_down";
-    private const string ANIM_WALK_UP = "walk_up";
-    private const string ANIM_WALK_LEFT = "walk_right";
-
+    private string ANIM_WALK_DOWN = "Fmove";
+    private string ANIM_WALK_UP = "Bmove";
+    private string ANIM_WALK_LEFT = "Lmove";
+    /// <summary>
+    /// //////////////////////////////////////////////////////////////////////////////
+    /// </summary>
+    private string ANIM_MY_IDLE = "idleMy";
+    
+    private string ANIM_MY_WALK_DOWN = "FMymove";
+    private string ANIM_MY_WALK_UP = "BMymove";
+    private string ANIM_MY_WALK_LEFT = "LMymove";
+    
     private string currentAnimation = "";
 
     public bool keyIsPressed = false;
+
+    private bool isFinishGoal = false;
+    
+    private float lastFootstepTime = 0f; // Thời gian lần cuối phát âm thanh bước chân
+    private const float footstepInterval = 4f; // Khoảng thời gian giữa mỗi lần phát âm thanh
     // Start is called before the first frame update
     void Start()
     {
@@ -68,7 +81,6 @@ public class PlayerController : MonoBehaviour
 
     void MoveNormal()
     {
-        // Lấy input di chuyển từ bàn phím
         float moveX = Input.GetAxisRaw("Horizontal");
         float moveY = Input.GetAxisRaw("Vertical");
 
@@ -76,25 +88,28 @@ public class PlayerController : MonoBehaviour
 
         movement = new Vector2(moveX, 0).normalized;
         directionAnim = new Vector2(moveX, moveY).normalized;
-        // Cập nhật vị trí nhân vật
-        transform.Translate(movement * speed * Time.deltaTime);
 
-        // Cập nhật animation dựa trên trạng thái di chuyển
+        // Phát âm thanh bước chân mỗi 2 giây
+        if (keyIsPressed && Time.time - lastFootstepTime >= footstepInterval)
+        {
+            SoundManager.Instance.OnStepFoot();
+            lastFootstepTime = Time.time; // Cập nhật thời gian phát âm thanh
+        }
+
+        transform.Translate(movement * speed * Time.deltaTime);
         UpdateAnimation();
     }
 
     void MoveStair()
     {
-        // Lấy input di chuyển từ bàn phím
         float moveX = Input.GetAxisRaw("Horizontal");
         float moveY = Input.GetAxisRaw("Vertical");
 
         keyIsPressed = IsMovementKeyPressed();
 
-        if (transform.position.y >= 0.5f) 
+        if (transform.position.y >= -1.12f) 
         {
             directionAnim = new Vector2(moveX, -moveY).normalized;
-            
         }
         else
         {
@@ -102,12 +117,18 @@ public class PlayerController : MonoBehaviour
         }
 
         movement = new Vector2(moveX, moveY).normalized;
-        // Cập nhật vị trí nhân vật
-        transform.Translate(movement * speed * Time.deltaTime);
 
-        // Cập nhật animation dựa trên trạng thái di chuyển
+        // Phát âm thanh bước chân (crack) mỗi 2 giây
+        if (keyIsPressed && Time.time - lastFootstepTime >= footstepInterval)
+        {
+            SoundManager.Instance.OnStepFootCrack();
+            lastFootstepTime = Time.time; // Cập nhật thời gian phát âm thanh
+        }
+
+        transform.Translate(movement * speed * Time.deltaTime);
         UpdateAnimation();
     }
+
 
     bool IsMovementKeyPressed()
     {
@@ -129,7 +150,6 @@ public class PlayerController : MonoBehaviour
     }
     void UpdateAnimation()
     {
-        return;
         string newAnimation = "";
 
         if (directionAnim.magnitude > 0)
@@ -142,7 +162,7 @@ public class PlayerController : MonoBehaviour
 
                 // Lật nhân vật nếu đi phải
                 Vector3 localScale = transform.localScale;
-                localScale.x = directionAnim.x > 0 ? Mathf.Abs(localScale.x) : -Mathf.Abs(localScale.x);
+                localScale.x = directionAnim.x < 0 ? Mathf.Abs(localScale.x) : -Mathf.Abs(localScale.x);
                 transform.localScale = localScale;
             }
             else
@@ -170,15 +190,10 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    //IEnumerator CoFalling()
-    //{
-    //    transform.Translate(new Vector3(0.5f, 0, 0) * speed * Time.deltaTime);
-    //    gameObject.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Dynamic;
-    //    yield return null; 
-    //}
 
     IEnumerator CoFalling()
     {
+        statePlayer = EStatePlayer.endGame;
         float duration = 2f; // Thời gian để di chuyển hết đường cung
         float elapsedTime = 0f;
         Vector3 startPoint = transform.position;
@@ -217,8 +232,11 @@ public class PlayerController : MonoBehaviour
             skeletonAnimation.AnimationState.SetAnimation(0, ANIM_IDLE_LEFT, true);
 
             statePlayer = EStatePlayer.endGame;
+        }else if (collision.gameObject.tag == "goal" && isFinishGoal)
+        {
+            statePlayer = EStatePlayer.endGame;
+            GameManager.Instance.SetWinGame();
         }
-        
     }
     private void OnTriggerExit2D(Collider2D collision)
     {
@@ -227,5 +245,20 @@ public class PlayerController : MonoBehaviour
             statePlayer = EStatePlayer.normal;
             //GetComponent<Rigidbody2D>().AddForce(new Vector2(0, -0.1f));
         }
+    }
+
+    public void FinishGoal()
+    {
+        if (!isFinishGoal)
+        {
+            isFinishGoal = true;
+            ANIM_IDLE_DOWN = ANIM_MY_IDLE;
+            ANIM_IDLE_LEFT = ANIM_MY_IDLE;
+            ANIM_IDLE_UP = ANIM_MY_IDLE;
+            ANIM_WALK_DOWN = ANIM_MY_WALK_DOWN;
+            ANIM_WALK_UP = ANIM_MY_WALK_UP;
+            ANIM_WALK_LEFT = ANIM_MY_WALK_LEFT;
+        }
+        
     }
 }

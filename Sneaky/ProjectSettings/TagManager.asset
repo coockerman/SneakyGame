@@ -8,11 +8,12 @@ TagManager:
   - player
   - rope
   - destination
+  - goal
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - wall
   - Water
   - UI
   - 

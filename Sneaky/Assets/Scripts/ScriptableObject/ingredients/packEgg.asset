@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: packEgg
   m_EditorClassIdentifier: 
   nameIngredient: "tr\u1EE9ng"
-  spriteIngredient: {fileID: -1045181238759104467, guid: 4874d1b1d4d803144b7a03df2e831e87, type: 3}
+  spriteIngredient: {fileID: -8201050130684069381, guid: 7fde274f8a256474a8e7b26200bf29db, type: 3}
